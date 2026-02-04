@@ -2,82 +2,109 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kawaii PhotoBooth ✨</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kawaii Booth Pro ✨</title>
+    
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700&family=Fredoka+One&display=swap" rel="stylesheet">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;600&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <audio id="shutter-sound" src="https://assets.mixkit.co/active_storage/sfx/3006/3006-preview.mp3"></audio>
-
-    <div class="floating-deco">☁️</div>
-    <div class="floating-deco d2">✨</div>
-    <div class="floating-deco d3">💖</div>
-
     <div id="flash-overlay"></div>
+    <div id="confetti-container"></div>
 
-    <main class="kawaii-container">
+    <div class="background-shapes">
+        <div class="shape blob-1">☁️</div>
+        <div class="shape blob-2">✨</div>
+        <div class="shape blob-3">🍓</div>
+        <div class="shape circle-1"></div>
+        <div class="shape circle-2"></div>
+    </div>
+
+    <main class="app-container">
         
-        <section id="scene-setup" class="scene active bounce-in">
-            <header class="kawaii-header">
-                <h1>✨ My <br> Booth ✨</h1>
-                <p class="tagline">Pilih paket fotomu, cutie!</p>
-            </header>
-            
-            <div class="selection-box cloud-panel">
-                <button class="cute-btn pink" onclick="startBooth(4)">
-                    <span class="icon">🍭</span>
-                    <span>4 Pose Mini</span>
-                </button>
-                <button class="cute-btn blue" onclick="startBooth(8)">
-                    <span class="icon">🍩</span>
-                    <span>8 Pose Seru</span>
-                </button>
-                <button class="cute-btn yellow" onclick="startBooth(12)">
-                    <span class="icon">🦄</span>
-                    <span>12 Pose Rame</span>
-                </button>
+        <section id="scene-home" class="scene active">
+            <div class="glass-card home-card bounce-in">
+                <div class="title-badge">NEW!</div>
+                <h1 class="main-title">My<br><span class="highlight">PhotoBooth</span></h1>
+                <p class="subtitle">Pilih paket fotomu, Cutie!</p>
+                
+                <div class="grid-options">
+                    <button class="menu-btn pink-btn" onclick="startBooth(4)">
+                        <div class="btn-icon">🍭</div>
+                        <span>4 Snaps</span>
+                    </button>
+                    <button class="menu-btn blue-btn" onclick="startBooth(8)">
+                        <div class="btn-icon">🦄</div>
+                        <span>8 Snaps</span>
+                    </button>
+                    <button class="menu-btn yellow-btn" onclick="startBooth(12)">
+                        <div class="btn-icon">👑</div>
+                        <span>12 Snaps</span>
+                    </button>
+                </div>
+
+                <div class="footer-note">Gunakan HP atau Laptop 📸</div>
             </div>
         </section>
 
-        <section id="scene-action" class="scene hidden">
-            <div class="booth-flex">
+        <section id="scene-cam" class="scene hidden">
+            <div class="booth-layout">
                 
-                <div class="camera-frame cloud-panel">
-                    <div class="video-container">
+                <div class="camera-wrapper glass-panel">
+                    <div class="video-frame">
                         <video id="video-feed" autoplay playsinline></video>
-                        <div id="countdown-overlay"></div>
+                        <div id="countdown"></div>
+                        <div class="live-badge">🔴 LIVE</div>
+                    </div>
+
+                    <div class="filter-menu">
+                        <span class="filter-label">✨ Filter:</span>
+                        <div class="filter-scroll">
+                            <button onclick="setFilter('none')" class="filter-chip active">Original</button>
+                            <button onclick="setFilter('soft')" class="filter-chip pink">🌸 Soft</button>
+                            <button onclick="setFilter('vintage')" class="filter-chip yellow">🍂 Retro</button>
+                            <button onclick="setFilter('mono')" class="filter-chip gray">📷 BW</button>
+                        </div>
                     </div>
                     
-                    <div class="action-controls">
-                        <button id="btn-capture" class="big-cute-btn start-color" onclick="startCaptureSequence()">
-                            📸 MULAI FOTO YUK!
+                    <div class="controls-area">
+                        <button id="btn-back" class="icon-btn" onclick="goHome()" title="Kembali">↩️</button>
+                        <button id="btn-snap" class="shutter-btn" onclick="startSequence()">
+                            <div class="inner-circle"></div>
                         </button>
-                        <button id="btn-retake" class="small-cute-btn hidden" onclick="resetToSetup()">
-                            ↩️ Ulangi Paket
-                        </button>
-                    </div>
+                        <div class="spacer"></div> </div>
                 </div>
 
-                <div class="preview-sidebar cloud-panel color-accent">
-                    <h3>🌸 Hasil Foto 🌸</h3>
-                    <span id="counter-badge">0 / 0</span>
-                    
-                    <div id="sticker-gallery">
-                        <div class="empty-sticker">Siap berpose? 😉</div>
+                <div class="gallery-wrapper glass-panel">
+                    <div class="gallery-header">
+                        <h3>My Album</h3>
+                        <span id="counter" class="pill-badge">0/0</span>
                     </div>
                     
-                    <button id="btn-download" class="big-cute-btn save-color hidden" onclick="downloadKawaiiStrip()">
+                    <div id="gallery-scroll" class="sticker-grid">
+                        <div class="empty-placeholder">
+                            <span>👇</span>
+                            <p>Foto akan muncul di sini!</p>
+                        </div>
+                    </div>
+                    
+                    <button id="btn-save" class="save-btn hidden" onclick="downloadStrip()">
                         💖 SIMPAN STRIP
                     </button>
                 </div>
+
             </div>
         </section>
 
     </main>
 
-    <canvas id="proc-canvas" style="display:none;"></canvas>
+    <canvas id="canvas-proc" style="display:none;"></canvas>
+
     <script src="script.js"></script>
 </body>
 </html>
